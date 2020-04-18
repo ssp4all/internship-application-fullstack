@@ -24,7 +24,7 @@ class myURL {
 }
 
 async function handleRequest(request) {
-
+	// To handle incoming requests
 	return fetch('https://cfw-takehome.developers.workers.dev/api/variants')
 		.then(data => {
 			if (data.ok) {
@@ -44,6 +44,7 @@ async function handleRequest(request) {
 				return showVar(url[1], 0)
 			}
 			else {
+				//No cookie
 				let rand = Math.random()
 				if (rand < 0.5)
 					// rand = 0
@@ -66,12 +67,12 @@ async function showVar(url, dec) {
 		// console.log(dec)
 		if (dec) {
 			ans = new HTMLRewriter()
-				.on('p#description', new ElementHandler("Hello"))
-				.on('h1#title', new ElementHandler("WELCOME"))
-				.on('a#url', new ElementHandler("My Portfolio"))
-				.on('title', new ElementHandler("First"))
+				.on('p#description', new addDetails("CLICK ON THIS LINK"))
+				.on('h1#title', new addDetails("WELCOME"))
+				.on('a#url', new addDetails("My Portfolio"))
+				.on('title', new addDetails("First"))
 				.on('a', new myURL("href", "https://ssp4all.github.io/"))
-				.on('h1', new ElementHandler("Cloudflare challenge 2020-1"))
+				.on('h1', new addDetails("Cloudflare challenge 2020-1"))
 				.transform(ans)
 			ans.headers.append('Set-Cookie', `var-1; Secure; Expiry=${expiryDate.toGMTString()}`)
 
@@ -79,12 +80,12 @@ async function showVar(url, dec) {
 		}
 		else {
 			ans = new HTMLRewriter()
-				.on('p#description', new ElementHandler("Hello"))
-				.on('h1#title', new ElementHandler("WELCOME"))
-				.on('a#url', new ElementHandler("My GITHUB"))
-				.on('title', new ElementHandler("second"))
+				.on('p#description', new addDetails("CLICK ON THIS LINK"))
+				.on('h1#title', new addDetails("WELCOME"))
+				.on('a#url', new addDetails("My GITHUB"))
+				.on('title', new addDetails("second"))
 				.on('a', new myURL("href", "https://github.com"))
-				.on('h1', new ElementHandler("Cloudflare challenge 2020-2"))
+				.on('h1', new addDetails("Cloudflare challenge 2020-2"))
 				.transform(ans)
 			ans.headers.append('Set-Cookie', `var-2; Secure; Expiry=${expiryDate.toGMTString()}`)
 
@@ -95,7 +96,7 @@ async function showVar(url, dec) {
 		throw new Error("Error >> " + e)
 	}
 }
-class ElementHandler {
+class addDetails {
 	constructor(myText) {
 		this.myText = myText
 	}
