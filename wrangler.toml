@@ -1,4 +1,4 @@
-name = "{{project-name}}"
+name = "{{Internship-challenge}}"
 type = "javascript"
 account_id = ""
 workers_dev = true
