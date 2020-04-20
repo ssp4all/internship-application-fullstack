@@ -38,26 +38,26 @@ async function handleRequest(request) {
 			// cookies
 			let cook = request.headers.get('Cookie')
 			if (cook && cook.includes('var-1')) {
-				return showVar(url[0], 1)
+				return showVar(url[0], 1, 1)
 			}
 			else if (cook && cook.includes('var-2')) {
-				return showVar(url[1], 0)
+				return showVar(url[1], 0, 1)
 			}
 			else {
 				//No cookie
 				let rand = Math.random()
 				if (rand < 0.5)
 					// rand = 0
-					return showVar(url[0], 0)
+					return showVar(url[0], 0, 0)
 				else
-					return showVar(url[1], 1)
+					return showVar(url[1], 1, 0)
 			}
 		}).catch(error => {
 			console.log("Err >> " + error)
 		});
 }
 
-async function showVar(url, dec) {
+async function showVar(url, dec, flag) {
 	let ans = await fetch(url)
 	var expiryDate = new Date()
 	expiryDate.setDate(expiryDate.getDate() + 1); //expires in 4 days
@@ -74,9 +74,10 @@ async function showVar(url, dec) {
 				.on('a', new myURL("href", "https://ssp4all.github.io/"))
 				.on('h1', new addDetails("Cloudflare challenge 2020-1"))
 				.transform(ans)
-			ans.headers.append('Set-Cookie', `var-1; Secure; Expiry=${expiryDate.toGMTString()}`)
+			if (!flag)
+				ans.headers.append('Set-Cookie', `var-1; Secure; Expiry=${expiryDate.toGMTString()}`)
 
-			return ans;
+			return ans
 		}
 		else {
 			ans = new HTMLRewriter()
@@ -84,11 +85,12 @@ async function showVar(url, dec) {
 				.on('h1#title', new addDetails("WELCOME"))
 				.on('a#url', new addDetails("My GITHUB"))
 				.on('title', new addDetails("second"))
-				.on('a', new myURL("href", "https://github.com"))
+				.on('a', new myURL("href", "https://github.com/ssp4all"))
 				.on('h1', new addDetails("Cloudflare challenge 2020-2"))
 				.transform(ans)
-			ans.headers.append('Set-Cookie', `var-2; Secure; Expiry=${expiryDate.toGMTString()}`)
-
+			if (!flag)
+				ans.headers.append('Set-Cookie', `var-2; Secure; Expiry=${expiryDate.toGMTString()}`)
+			
 			return ans;
 		}
 	}
